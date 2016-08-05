@@ -1,0 +1,52 @@
+﻿@{
+    ViewData["Title"] = "Compare schema";
+}
+@model SqlComparer.Web.ViewModels.SchemaComparison
+
+<div class="row">
+    <div class="span12" style="text-align: center">
+        <h2 class="text-center">Compare a schema</h2>
+        <hr/>
+
+        <form asp-controller="Search" asp-action="CompareSchema" method="post">
+            <div class="row" id="search">
+                <label for="schemaName">Schema name:</label>
+                <input asp-for="SchemaName" class="form-control" type="text" id="schemaName" placeholder="schema name" value="dbo"/>
+                <button type="submit" class="btn vgggreen">
+                    <p class="whitetext">Search</p>
+                </button>
+                <hr/>
+            </div>
+            <div class="row" id="selectedConnections">
+                @for (var i = 0; i < Model.ConfigConnections.Count; i++)
+                {
+                    <div class="col-sm-4">
+                        <span>@Model.ConfigConnections[i].ConnectionName </span>
+                        <input class="emphasis"  checked data-size="small" id="conn.display.@Model.ConfigConnections[i].ConnectionName" onchange="includeConnection('@Model.ConfigConnections[i].ConnectionName')" data-on-color="warning" type="checkbox" name="my-checkbox" checked>
+                        <input id="conn.name.@Model.ConfigConnections[i].ConnectionName" asp-for="@Model.ConfigConnections[i].ConnectionName" type="hidden"/>
+                        <input id="conn.incl.@Model.ConfigConnections[i].ConnectionName" asp-for="@Model.ConfigConnections[i].IsIncluded" type="hidden" value="true"/>
+                    </div>
+                }
+            </div>
+        </form>
+    </div>
+
+    @{
+        var notEncryptedComparisons = Model.ComparisonResults.Where(result => result.Value.All(comparison => !comparison.IsEncrypted)).ToArray();
+        var encryptedComparisons = Model.ComparisonResults.Except(notEncryptedComparisons).ToArray();
+
+        if (encryptedComparisons.Any())
+        {
+            <div>Encrypted procedures:</div>
+            foreach (var encryptedComparison in encryptedComparisons)
+            {
+                <button class="btn btn-warning">@encryptedComparison.Key</button>
+            }
+        }
+
+        if (notEncryptedComparisons.Any())
+        {
+            Html.RenderPartial("Comparisons/_ListComparison", notEncryptedComparisons.ToDictionary(x => x.Key, x=> x.Value));
+        }
+    }
+</div>

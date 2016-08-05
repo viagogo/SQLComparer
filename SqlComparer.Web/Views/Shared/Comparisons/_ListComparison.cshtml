@@ -1,0 +1,36 @@
+﻿@using SqlComparer.Model
+@using SqlComparer.Web.ViewModels
+@model IDictionary<ObjectIdentifier, IList<ComparisonResultViewModel>>
+
+<div style="width: 100%;">
+    @foreach (var element in Model)
+    {
+        var backgroundColour =
+            element.Value.Any(x => x.ComparisonResult.Outcome == ComparisonOutcome.Different) ? "red" :
+                element.Value.Any(x => x.ComparisonResult.Outcome == ComparisonOutcome.Missing) ? "orange" :
+                    "green";
+        
+        var isDifferent = element.Value.Any(x => x.ComparisonResult.Outcome == ComparisonOutcome.Different || x.ComparisonResult.Outcome == ComparisonOutcome.Missing);
+
+        if (isDifferent)
+        {
+            var uniqueId = Guid.NewGuid().ToString("N");
+
+            <div style="background-color: @backgroundColour; float: left; height: 50px; margin: 20px; width: 300px;" class="listEntry" data-target="@uniqueId">
+                <span>@element.Key.Name</span>
+            </div>
+
+            <div id="@uniqueId" style="display: none;">
+                @{
+                    Html.RenderPartial("Comparisons/_GridComparison", element);
+                }
+            </div>
+        }
+        else
+        {
+            <div style="background-color: @backgroundColour; float: left; height: 50px; margin: 20px; width: 300px;">
+                <span>@element.Key.Name</span>
+            </div>
+        }
+    }
+</div>

@@ -1,0 +1,91 @@
+﻿@using SqlComparer.Model
+@using SqlComparer.Web.ViewModels
+@model KeyValuePair<ObjectIdentifier, IList<ComparisonResultViewModel>>
+
+<div class="span12" style="clear: both;">
+    <h3>@Model.Key</h3>
+
+    <table class="table table-bordered" style="width: 40%; Height: 150px;" align="center">
+        @*First line. First block is empty*@
+        @{
+            var orderedComparisons = Model.Value.OrderBy(x => x.LeftAlias).ThenBy(x => x.RightAlias);
+            var aliases = orderedComparisons.Select(x => x.LeftAlias).Distinct().ToArray();
+        }
+        <tr>
+            <th>#</th>
+            @foreach (var comparison in aliases)
+            {
+                <th>@comparison</th>
+            }
+        </tr>
+        @{
+            var modals = new Dictionary<string, ComparisonResultViewModel>();
+        }
+
+        @foreach (var alias in aliases)
+        {
+            var comparisons = orderedComparisons.Where(x => x.LeftAlias == alias);
+            <tr>
+                <th>@alias</th>
+                @foreach (var comparison in comparisons)
+                {
+                    var backgroundColour =
+                        comparison.ComparisonResult.Outcome == ComparisonOutcome.Equal ? "#afdb76" :
+                            comparison.ComparisonResult.Outcome == ComparisonOutcome.Different ? "#f31616" :
+                                comparison.ComparisonResult.Outcome == ComparisonOutcome.Missing ? "#fbefb1" :
+                                        "white";
+
+                    var message = string.IsNullOrWhiteSpace(comparison.LeftEntity) && string.IsNullOrWhiteSpace(comparison.RightEntity) ? "Missing in both" :
+                                    string.IsNullOrWhiteSpace(comparison.LeftEntity) ? $"Missing in {comparison.LeftAlias}" :
+                                        string.IsNullOrWhiteSpace(comparison.RightEntity) ? $"Missing in {comparison.RightAlias}" :
+                                            comparison.ComparisonResult.Outcome.ToString();
+
+                    if (comparison.ComparisonResult.Outcome == ComparisonOutcome.SameObject)
+                    {
+                        message = "-";
+                    }
+
+                    if (comparison.ComparisonResult.Outcome == ComparisonOutcome.Different || comparison.ComparisonResult.Outcome == ComparisonOutcome.Missing)
+                    {
+                        if (string.IsNullOrWhiteSpace(comparison.LeftEntity) && string.IsNullOrWhiteSpace(comparison.RightEntity))
+                        {
+                            <td style="background-color: @backgroundColour; font-weight: bold;">@message</td>
+                        }
+                        else
+                        {
+                            var uniqueId = Guid.NewGuid().ToString("N");
+                            modals.Add(uniqueId, comparison);
+                            <td style="background-color: @backgroundColour; font-weight: bold;" class="clickable" role="button" data-toggle="modal" data-target="#@uniqueId">@message</td>
+                        }
+                    }
+                    else
+                    {
+                        <td style="background-color: @backgroundColour; font-weight: bold;">@message</td>
+                    }
+                }
+            </tr>
+        }
+    </table>
+
+    @{
+        foreach (var modal in modals)
+        {
+            <div id="@modal.Key" class="modal fade" style="display: none;" tabindex="-1" data-focus-on="input:first">
+                <div class="modal-dialog" style="width: 90%">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h3 class="modal-header-text">@Model.Key</h3>
+                        </div>
+
+                        <div class="modal-body">
+                            @{
+                                Html.RenderPartial("Comparisons/_SideBySideComparison", modal.Value);
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>

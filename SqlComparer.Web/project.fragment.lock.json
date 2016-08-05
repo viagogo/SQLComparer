@@ -1,0 +1,24 @@
+{
+  "version": 2,
+  "exports": {
+    "SqlComparer/1.0.0": {
+      "type": "project",
+      "framework": ".NETFramework,Version=v4.6",
+      "compile": {
+        "bin/Debug/SqlComparer.dll": {}
+      },
+      "runtime": {
+        "../packages/Microsoft.SqlServer.TransactSql.ScriptDom.13.0.1601.5/lib/net40/Microsoft.SqlServer.TransactSql.ScriptDom.dll": {},
+        "../packages/NLog.4.3.6/lib/net45/NLog.dll": {},
+        "bin/Debug/SqlComparer.dll": {}
+      },
+      "contentFiles": {
+        "bin/Debug/SqlComparer.pdb": {
+          "buildAction": "None",
+          "codeLanguage": "any",
+          "copyToOutput": true
+        }
+      }
+    }
+  }
+}
