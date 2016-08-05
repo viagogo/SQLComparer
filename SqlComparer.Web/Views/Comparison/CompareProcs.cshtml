@@ -1,0 +1,32 @@
+﻿@{
+    ViewData["Title"] = "Compare two procs";
+}
+@model SqlComparer.Web.ViewModels.ComparisonResultViewModel
+
+<div class="row">
+    <div class="span12" style="text-align: center">
+        <h2 class="text-center">Compare two procs</h2>
+        <hr/>
+
+        @if (TempData["message"] != null)
+        {
+            <div class="alert alert-danger"> <strong>@TempData["message"]</strong></div>
+        }
+
+        <form asp-controller="Comparison" asp-action="CompareProcs" method="post">
+            <div>
+                <textarea asp-for="@Model.LeftEntity" id="leftEntity" class="well pull-left" style="width: 450px; height: 700px; max-width: none"></textarea>
+                <textarea asp-for="@Model.RightEntity" id="rightEntity" class="well pull-right" style="width: 450px; height: 700px; max-width: none"></textarea>
+            </div>
+
+            <div>
+                <input type="submit" value="COMPARE" class="btn btn-success" style="width: 250px;" />
+            </div>
+        </form>
+    </div>
+
+    @if (Model.ComparisonResult != null)
+    {
+        Html.RenderPartial("Comparisons/_SideBySideComparison", Model);
+    }
+</div>

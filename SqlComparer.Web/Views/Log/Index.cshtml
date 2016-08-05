@@ -1,0 +1,43 @@
+﻿@{
+    ViewData["Title"] = "Log History";
+}
+@model SqlComparer.Web.ViewModels.LogHistory
+
+@{
+    var colours = new Dictionary<string, string>
+    {
+        { "FATAL", "#990000"},
+        { "ERROR", "#ff4d4d"},
+        { "WARN", "#ffad33"},
+        { "INFO", "#99ebff"},
+        { "DEBUG", "#4dffb8"},
+        { "TRACE", "#e6fff5"},
+    };
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <h2 class="text-center">Log History</h2>
+        <hr/>
+
+        <table class="table-bordered table-hover table-striped table-condensed">
+            <tr>
+                <th></th>
+                <th>Time</th>
+                <th>Source</th>
+                <th>Severity</th>
+                <th>Message</th>
+            </tr>
+            @foreach (var entry in Model.LogMessages.OrderByDescending(x => x.EventTime))
+            {
+                <tr>
+                    <td style="background-color: @colours[entry.Severity];"></td>
+                    <td>@entry.EventTime</td>
+                    <td style="font-size: 12px;">@entry.Source</td>
+                    <td class="text-center">@entry.Severity</td>
+                    <td>@entry.Message</td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>

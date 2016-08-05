@@ -1,0 +1,93 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+@using SqlComparer.Model
+@model SqlComparer.Web.ViewModels.Search
+
+<div class="container pad20">
+    <div class="row">
+
+        <form asp-controller="Search" asp-action="Search" method="post" class="form-horizontal">
+            <div class="col-sm-6">
+                <h1>
+                    <i class="glyphicon glyphicon-search"></i> Search
+                </h1>
+                @*<div class="form-inline">
+                        <label for="extConn">External Connection String:</label>
+                        <input asp-for="ExternalConnectionString" type="text" id="extConn" placeholder="connection string" class="form-control"/>
+                        <hr/>
+                    </div>*@
+                <div class="form-group" id="search">
+                    <input asp-for="ObjectName" class="form-control" type="text" id="objectName" placeholder="comma separated list of procs" value="" />
+                    <button type="submit" class="btn vgggreen">
+                        <p class="whitetext">Search</p>
+                    </button>
+                </div>
+            </div>
+            <div class="col-sm-1">
+                <div class="form-group text-left" id="selectedConnections">
+                    @for (var i = 0; i < Model.ConfigConnections.Count; i++)
+                    {
+                        <div class="row">
+                            <span>@Model.ConfigConnections[i].ConnectionName </span>
+                            <input class="emphasis" checked data-size="small" data-on-color="warning" id="conn.display.@Model.ConfigConnections[i].ConnectionName" onchange="includeConnection('@Model.ConfigConnections[i].ConnectionName')" type="checkbox" name="my-checkbox" checked>
+                            <input id="conn.name.@Model.ConfigConnections[i].ConnectionName" asp-for="@Model.ConfigConnections[i].ConnectionName" type="hidden" />
+                            <input id="conn.incl.@Model.ConfigConnections[i].ConnectionName" asp-for="@Model.ConfigConnections[i].IsIncluded" type="hidden" value="true" />
+                        </div>
+                    }
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        @if (TempData["message"] != null)
+        {
+            <div class="alert alert-success"> <strong>Results: </strong>@TempData["message"]</div>
+        }
+
+        @{
+            var comparisonsWithExistingEntities = Model.ComparisonResults.Where(x => x.Value.Any(y =>
+                y.ComparisonResult.Outcome == ComparisonOutcome.Different ||
+                y.ComparisonResult.Outcome == ComparisonOutcome.Equal) ||
+                x.Value.Any(y => y.IsEncrypted))
+                .ToArray();
+            var notFoundEntities = Model.ComparisonResults.Except(comparisonsWithExistingEntities).ToArray();
+
+            if (notFoundEntities.Any())
+            {
+                <div>
+                    <span>Not found:</span>
+                    @foreach (var notFoundEntity in notFoundEntities)
+                    {
+                        <button class="btn btn-danger">@notFoundEntity.Key</button>
+                    }
+                </div>
+            }
+
+            var notEncryptedComparisons = comparisonsWithExistingEntities.Where(result => result.Value.All(comparison => !comparison.IsEncrypted)).ToArray();
+            var encryptedComparisons = comparisonsWithExistingEntities.Except(notEncryptedComparisons).ToArray();
+
+            if (encryptedComparisons.Any())
+            {
+                <div>
+                    <span>Encrypted procedures:</span>
+                    @foreach (var encryptedComparison in encryptedComparisons)
+                    {
+                        <button class="btn btn-warning">@encryptedComparison.Key</button>
+                    }
+                </div>
+            }
+
+            if (notEncryptedComparisons.Any())
+            {
+                foreach (var comparisonResult in notEncryptedComparisons)
+                {
+                    Html.RenderPartial("Comparisons/_GridComparison", comparisonResult);
+                }
+            }
+        }
+    </div>
+</div>

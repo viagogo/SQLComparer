@@ -1,0 +1,98 @@
+﻿@{
+    ViewData["Title"] = "Create Entity";
+}
+@model SqlComparer.Web.ViewModels.CreateEntity
+
+
+<div class="row">
+    <div class="span12" style="text-align: center">
+        @{
+            if (TempData["success"] != null)
+            {
+                var success = (bool) TempData["success"];
+                if (success)
+                {
+                    <span style="background-color: greenyellow">@TempData["message"]</span>
+                }
+                else
+                {
+                    <span style="background-color: red">@TempData["message"]</span>
+                }
+            }
+        }
+
+        <h2 class="text-center">Create new entity</h2>
+       
+
+        <div>
+            <form asp-controller="CreateEntity" asp-action="CreateEntity" method="post">
+                @*<fieldset>
+                    <legend>Additional sources</legend>
+
+                    <input asp-for="ExternalConnection" type="text" id="extConn" placeholder="External connection string" style="margin: 2px; width: 800px; max-width: none;" />
+                </fieldset>*@
+
+                <fieldset>
+                    <legend>Configuration</legend>
+
+                    <select asp-for="Database" id="databaseSelection">
+                        @foreach (var db in Model.ExistingDatabases)
+                        {
+                            <option value="@db">@db</option>
+                        }
+                    </select>
+
+                    <div id="selectedConnections">
+                        @for (var i = 0; i < Model.Connections.Count; i++)
+                        {
+                            <span>@Model.Connections[i].ConnectionName </span>
+                           <input class="emphasis" checked data-size="small" data-on-color="warning" id="conn.display.@Model.Connections[i].ConnectionName" onchange="includeConnection('@Model.Connections[i].ConnectionName')" type="checkbox" name="my-checkbox" checked>
+                            <input id="conn.name.@Model.Connections[i].ConnectionName" asp-for="@Model.Connections[i].ConnectionName" type="hidden"/>
+                            <input id="conn.incl.@Model.Connections[i].ConnectionName" asp-for="@Model.Connections[i].IsIncluded" type="hidden" value="true"/>
+                        }
+                    </div>
+
+                    @foreach (var db in Model.ExistingDatabases)
+                    {
+                        <input asp-for="ExistingDatabases" type="hidden" value="@db"/>
+                    }
+
+                </fieldset>
+
+                <fieldset>
+                    <div>
+                        <textarea asp-for="Sql" class="well" style="max-width: none; width: 100%; height: 400px;"></textarea>    
+                    </div>
+                </fieldset>
+
+                <label for="forceCreate">Overwrite existing entities</label>
+                <input asp-for="ForceCreate" type="checkbox" id="forceCreate"/>
+
+                <input type="submit" value="Create" class="btn btn-info" style="margin: 5px;"/>
+            </form>
+        </div>
+
+        @if (Model.ExistingEntities.Any())
+        {
+            <div>
+                <hr />
+                <h2>Conflicts found</h2>
+                <p>
+                    If you wish to override the existing entities, tick the checkbox.
+
+                    Conflicts found in: <br/> <br/>
+                    @foreach (var comparisonResult in Model.ExistingEntities)
+                    {
+                        <span class="btn btn-warning" style="color: black; font-weight: bold">@comparisonResult.LeftAlias</span>
+                    }
+                </p>
+            </div>
+
+            foreach (var comparison in Model.ExistingEntities)
+            {
+                Html.RenderPartial("Comparisons/_SideBySideComparison", comparison);
+                <hr />
+            }
+        }
+    </div>
+</div>

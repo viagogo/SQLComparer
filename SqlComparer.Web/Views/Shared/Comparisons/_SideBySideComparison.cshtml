@@ -1,0 +1,100 @@
+﻿@using SqlComparer.Model
+@using SqlComparer.Web.ViewModels
+@model ComparisonResultViewModel
+
+<div style="clear: both; width: 100%">
+    <div>
+        @{
+            var needsAction = Model.ComparisonResult.Outcome == ComparisonOutcome.Missing ||
+                              Model.ComparisonResult.Outcome == ComparisonOutcome.Different;
+        }
+
+        <div class="col-lg-5">
+            <h3 style="font-weight: bold;">@Model.LeftAlias</h3>
+
+            <pre class="well" style="line-height: initial; max-width: none; text-align: initial; white-space: initial; word-break: initial;">
+                @{
+                    for (var i = 0; i < Model.ComparisonResult.LeftSourceTreeByLine.Count; i++)
+                    {
+                        var line = Model.ComparisonResult.LeftSourceTreeByLine.ElementAt(i);
+                        if (Model.ComparisonResult.LinesDifferingInLeftEntity.Contains(line.Key))
+                        {
+                            <code style="background-color: orangered">@line.Value</code>
+                        }
+                        else
+                        {
+                            <code>@line.Value</code>
+                        }
+                    }
+                }
+        </pre>
+        </div>
+
+        <div class="col-lg-2 text-center" style="margin-top: 57px;">
+            @if (Model.ShowPushOptions)
+            {
+                <div style="display: inline; margin-left: 10px;">
+                    @if (needsAction && !string.IsNullOrWhiteSpace(Model.LeftEntity))
+                    {
+                        <form method="post" asp-controller="Comparison" asp-action="Push" style="display: inline;">
+                            <button class="btn btn-danger">Push <i class="glyphicon glyphicon-arrow-right"></i></button>
+                            <input type="hidden" name="PushFromLeftToRight" value="true"/>
+                            <input asp-for="TargetDatabase" type="hidden"/>
+                            <input asp-for="LeftAlias" type="hidden"/>
+                            <input asp-for="RightAlias" type="hidden"/>
+                            <input asp-for="LeftEntity" type="hidden"/>
+                            <input asp-for="RightEntity" type="hidden"/>
+                        </form>
+                        <br/>
+                    }
+
+                    @if (needsAction && !string.IsNullOrWhiteSpace(Model.RightEntity))
+                    {
+                        <form method="post" asp-controller="Comparison" asp-action="Push" style="display: inline;">
+                            <button class="btn btn-danger" style="margin: 5px 0 0 6px"><i class="glyphicon glyphicon-arrow-left"></i> Push</button>
+                            <input type="hidden" name="PushFromRightToLeft" value="true"/>
+                            <input asp-for="TargetDatabase" type="hidden"/>
+                            <input asp-for="LeftAlias" type="hidden"/>
+                            <input asp-for="RightAlias" type="hidden"/>
+                            <input asp-for="LeftEntity" type="hidden"/>
+                            <input asp-for="RightEntity" type="hidden"/>
+                        </form>
+                    }
+                </div>
+            }
+
+            @if (!needsAction)
+            {
+                <div>
+                    <i class="glyphicon glyphicon-ok-sign" style="color: green; font-size: 25px;"></i>
+                </div>
+            }
+
+        </div>
+
+        <div class="col-lg-5">
+            <h3 style="font-weight: bold;">@Model.RightAlias</h3>
+
+            <pre class="well" style="line-height: initial; max-width: none; text-align: initial; white-space: initial; word-break: initial;">
+                @{
+                    for (var i = 0; i < Model.ComparisonResult.RightSourceTreeByLine.Count; i++)
+                    {
+                        var line = Model.ComparisonResult.RightSourceTreeByLine.ElementAt(i);
+                        if (Model.ComparisonResult.LinesDifferingInRightEntity.Contains(line.Key))
+                        {
+                            <code style="background-color: orangered">@line.Value</code>
+                        }
+                        else
+                        {
+                            <code>@line.Value</code>
+                        }
+                    }
+                }
+        </pre>
+        </div>
+
+
+    </div>
+</div>
+
+<div style="clear: both;"></div>
