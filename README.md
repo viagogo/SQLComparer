@@ -70,7 +70,7 @@ If you wish to add more environments, perform the following steps:
 ```json
 "ConnectionStrings": {
     ...,
-    "Staging", "Data Source=StagingSource;Initial Catalog=StagingDb;Integrated Security=true"
+    "Staging": "Data Source=StagingSource;Initial Catalog=StagingDb;Integrated Security=true"
 },
 ```
 
