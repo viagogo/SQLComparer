@@ -233,17 +233,6 @@ where s.Name = '{schemaIdentifier.Schema}'
                     command.CommandType = CommandType.Text;
                     command.Connection = conn;
 
-                    // Only for dev db
-                    // Temporary but useful during development so we can test with dev & qa db
-                    try
-                    {
-                        command.CommandText = $"exec SetContextInfoToProductBacklogItem  @ProductBacklogItemID = 69409";
-                        command.ExecuteNonQuery();
-                    }
-                    catch (Exception e)
-                    {
-                    }
-
                     try
                     {
                         command.CommandText = sql;
