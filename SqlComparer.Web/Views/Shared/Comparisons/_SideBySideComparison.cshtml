@@ -11,23 +11,21 @@
 
         <div class="col-sm-5">
             <h3>@Model.LeftAlias</h3>
+                <ol class="well comparison">
 
-            <pre class="well comparison">
-                @{
-                    for (var i = 0; i < Model.ComparisonResult.LeftSourceTreeByLine.Count; i++)
+                    @for (var i = 0; i < Model.ComparisonResult.LeftSourceTreeByLine.Count; i++)
                     {
                         var line = Model.ComparisonResult.LeftSourceTreeByLine.ElementAt(i);
                         if (Model.ComparisonResult.LinesDifferingInLeftEntity.Contains(line.Key))
                         {
-                            <code class="Diff">@line.Value</code>
+                            <li class="marh20"><code class="Diff">@line.Value</code></li>
                         }
                         else
                         {
-                            <code>@line.Value</code>
+                            <li class="marh20"><code>@line.Value</code></li>
                         }
-                    }
-                }
-            </pre>
+                    }    
+            </ol>
         </div>
 
         <div class="col-sm-2 text-center">
@@ -37,10 +35,7 @@
                 <span><i class="glyphicon glyphicon-ok-sign cEqu btn-lg padResp40 "></i></span>
 
             }
-            else
-            {
-                <span><i class="glyphicon glyphicon-remove-sign cDiff btn-lg"></i></span>
-            }
+            
             @if (Model.ShowPushOptions)
             {
                 <div class="row pad10">
@@ -80,22 +75,24 @@
         <div class="col-sm-5">
             <h3>@Model.RightAlias</h3>
 
-            <pre class="well comparison">
+            <ol class="well comparison">
                 @{
                     for (var i = 0; i < Model.ComparisonResult.RightSourceTreeByLine.Count; i++)
                     {
                         var line = Model.ComparisonResult.RightSourceTreeByLine.ElementAt(i);
                         if (Model.ComparisonResult.LinesDifferingInRightEntity.Contains(line.Key))
                         {
-                            <code class="Diff">@line.Value</code>
+                            <li class="marh20"><code class="Diff">@line.Value</code></li>
                         }
                         else
                         {
-                            <code>@line.Value</code>
+                            <li class="marh20">
+                                <code>@line.Value</code>
+                            </li>
                         }
                     }
                 }
-        </pre>
+</ol>
         </div>
 
 

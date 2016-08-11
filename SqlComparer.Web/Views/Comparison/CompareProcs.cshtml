@@ -15,13 +15,13 @@
 
     <form asp-controller="Comparison" asp-action="CompareProcs" method="post">
         <div class="col-sm-5">
-            <textarea asp-for="@Model.LeftEntity" id="leftEntity" class="well pull-left" style="width: 450px; height: 700px; max-width: none"></textarea>
+            <textarea asp-for="@Model.LeftEntity" id="leftEntity" class="well pull-left textareacompare"></textarea>
         </div>
         <div class="col-sm-2">
-            <input type="submit" value="Compare" class="btn btn-teal btn-group btn-group-justified" />
+            <input type="submit" value="Compare" class="btn btn-teal floating" />
         </div>
         <div class="col-sm-5">
-            <textarea asp-for="@Model.RightEntity" id="rightEntity" class="well pull-right" style="width: 450px; height: 700px; max-width: none"></textarea>
+            <textarea asp-for="@Model.RightEntity" id="rightEntity" class="well pull-right textareacompare"></textarea>
         </div>
     </form>
 
