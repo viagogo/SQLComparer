@@ -26,13 +26,13 @@
         {
             var comparisons = orderedComparisons.Where(x => x.LeftAlias == alias);
             <tr>
-                <th class="text-center">@alias</th>
+                <th class="text-center" style="white-space: nowrap">@alias</th>
                 @foreach (var comparison in comparisons)
                 {
                     var backgroundColour =
                         comparison.ComparisonResult.Outcome == ComparisonOutcome.Equal ? "Equ" :
                             comparison.ComparisonResult.Outcome == ComparisonOutcome.Different ? "Diff" :
-                                comparison.ComparisonResult.Outcome == ComparisonOutcome.Missing ? "Miss" :
+                                comparison.ComparisonResult.Outcome == ComparisonOutcome.Missing ? "Mis" :
                                         "white";
 
                     var message = string.IsNullOrWhiteSpace(comparison.LeftEntity) && string.IsNullOrWhiteSpace(comparison.RightEntity) ? "Missing in both" :
