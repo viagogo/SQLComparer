@@ -31,13 +31,23 @@
         </div>
 
         <div class="col-sm-2 text-center">
+
+            @if (!needsAction)
+            {
+                <span><i class="glyphicon glyphicon-ok-sign cEqu btn-lg padResp40 "></i></span>
+
+            }
+            else
+            {
+                <span><i class="glyphicon glyphicon-remove-sign cDiff btn-lg"></i></span>
+            }
             @if (Model.ShowPushOptions)
             {
-                <div>
+                <div class="row pad10">
                     @if (needsAction && !string.IsNullOrWhiteSpace(Model.LeftEntity))
                     {
                         <form method="post" asp-controller="Comparison" asp-action="Push">
-                            <button class="btn btn-danger">Push <i class="glyphicon glyphicon-arrow-right"></i></button>
+                            <button class="btn btn-squirtle">Push <i class="glyphicon glyphicon-arrow-right"></i></button>
                             <input type="hidden" name="PushFromLeftToRight" value="true"/>
                             <input asp-for="TargetDatabase" type="hidden"/>
                             <input asp-for="LeftAlias" type="hidden"/>
@@ -46,11 +56,12 @@
                             <input asp-for="RightEntity" type="hidden"/>
                         </form>
                     }
-
+                </div>
+                <div class="row pad10">
                     @if (needsAction && !string.IsNullOrWhiteSpace(Model.RightEntity))
                     {
                         <form method="post" asp-controller="Comparison" asp-action="Push">
-                            <button class="btn btn-danger" style="margin: 5px 0 0 6px"><i class="glyphicon glyphicon-arrow-left"></i> Push</button>
+                            <button class="btn btn-squirtle"><i class="glyphicon glyphicon-arrow-left"></i> Push</button>
                             <input type="hidden" name="PushFromRightToLeft" value="true"/>
                             <input asp-for="TargetDatabase" type="hidden"/>
                             <input asp-for="LeftAlias" type="hidden"/>
@@ -60,17 +71,9 @@
                         </form>
                     }
                 </div>
-            }
-
-            @if (!needsAction)
-            {
-                <span><i class="glyphicon glyphicon-ok-sign cEqu btn-lg padResp40 "></i></span>
 
             }
-            else
-            {
-                <span><i class="glyphicon glyphicon-remove-sign cDiff btn-lg padResp40"></i></span>
-            }
+
 
         </div>
 
@@ -98,5 +101,3 @@
 
     </div>
 </div>
-
-<div class="clearfix"></div>
