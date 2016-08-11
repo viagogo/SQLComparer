@@ -192,6 +192,57 @@ body
 	background-image: none;
 }
 
+/* custom button - squirtle */
+.btn-squirtle
+{
+	background-color: #8aaeb2;
+	border-color: #8aaeb2;
+	color: #fff;
+}
+.btn-squirtle:focus,
+.btn-squirtle.focus
+{
+	background-color: #6b999e;
+	border-color: #6b999e;
+	color: #fff;
+}
+.btn-squirtle:hover
+{
+	background-color: #9fbdc1;
+	border-color: #9fbdc1;
+	color: #fff;
+}
+.btn-squirtle:active,
+.btn-squirtle.active,
+.open > .dropdown-toggle.btn-squirtle
+{
+	background-color: #becac5;
+	border-color: #becac5;
+	color: #fff;
+}
+.btn-squirtle:active:hover,
+.btn-squirtle.active:hover,
+.open > .dropdown-toggle.btn-squirtle:hover,
+.btn-info:active:focus,
+.btn-info.active:focus,
+.open > .dropdown-toggle.btn-squirtle:focus,
+.btn-squirtle:active.focus,
+.btn-squirtle.active.focus,
+.open > .dropdown-toggle.btn-squirtle.focus
+{
+	background-color: #becac5;
+	border-color: #becac5;
+	color: #fff;
+}
+.btn-squirtle:active,
+.btn-squirtle.active,
+.open > .dropdown-toggle.btn-squirtle
+{
+	background-image: none;
+}
+
+
+
 /* custom toggle - mint */
 .bootstrap-switch .bootstrap-switch-handle-on.bootstrap-switch-mint,
 .bootstrap-switch .bootstrap-switch-handle-off.bootstrap-switch-mint {
@@ -248,7 +299,7 @@ body
     padding-top: 40%;
 }
 .mar0 {
-    maring: 0;
+    margin: 0;
 }
 .mar10
 {
