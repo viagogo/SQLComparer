@@ -168,12 +168,19 @@ where
 
             foreach (var connectionString in connectionStrings)
             {
-                foreach (var procedureIdentifier in GetIdentifiersFromSchema(schemaIdentifier, connectionString))
+                try
                 {
-                    if (!resultSet.Contains(procedureIdentifier))
+                    foreach (var procedureIdentifier in GetIdentifiersFromSchema(schemaIdentifier, connectionString))
                     {
-                        resultSet.Add(procedureIdentifier);
+                        if (!resultSet.Contains(procedureIdentifier))
+                        {
+                            resultSet.Add(procedureIdentifier);
+                        }
                     }
+                }
+                catch (Exception e)
+                {
+                    Logger.Error(e);
                 }
             }
 
