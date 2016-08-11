@@ -355,10 +355,6 @@ code {
     font-size: 13px;
 }
 
-.floating {
-    position: fixed;
-}
-
 @media screen and (max-width: 767px)
 {
 	.carousel-caption
