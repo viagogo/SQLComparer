@@ -109,10 +109,20 @@ namespace SqlComparer.Web.Controllers
                     var baseProc = _databaseEntityRepository.GetStoredProcedure(identifier, connectionString);
                     var leftAlias = _optionsService.ConnectionStrings.GetAliasByConnection(connectionString);
 
+                    if (baseProc == null)
+                    {
+                        continue;
+                    }
+
                     foreach (var connectionStringCopy in connectionStringCopies)
                     {
                         var variableProc = _databaseEntityRepository.GetStoredProcedure(identifier, connectionStringCopy);
                         var rightAlias = _optionsService.ConnectionStrings.GetAliasByConnection(connectionStringCopy);
+
+                        if (variableProc == null)
+                        {
+                            continue;
+                        }
 
                         if (!results.ContainsKey(identifier))
                         {
