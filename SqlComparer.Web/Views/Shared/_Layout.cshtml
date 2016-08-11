@@ -40,15 +40,19 @@
             </div>
         </div>
     </div>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>Developed by viagogo</p>
-        </footer>
-    </div>
+<div class="container body-content">
 
-    <environment names="Development">
+    @RenderBody()
+
+</div>
+
+<footer class="footer pad20">
+    <div class="container">
+        <p>Developed by viagogo</p>
+    </div>
+</footer>
+
+<environment names="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>

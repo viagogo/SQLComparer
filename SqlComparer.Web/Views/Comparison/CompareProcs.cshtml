@@ -4,21 +4,24 @@
 @model SqlComparer.Web.ViewModels.ComparisonResultViewModel
 
 <div class="row">
+
     @if (TempData["message"] != null)
     {
         <div class="alert alert-danger">@TempData["message"]</div>
     }
-    <h1>
-        <i class="glyphicon glyphicon-duplicate"></i> Compare
-    </h1>
-
-
+    <div class="col-sm-12">
+        <h1>
+            <i class="glyphicon glyphicon-duplicate"></i> Compare
+        </h1>
+    </div>
+</div>
+<div class="row">
     <form asp-controller="Comparison" asp-action="CompareProcs" method="post">
         <div class="col-sm-5">
             <textarea asp-for="@Model.LeftEntity" id="leftEntity" class="well pull-left textareacompare"></textarea>
         </div>
         <div class="col-sm-2">
-            <input type="submit" value="Compare" class="btn btn-teal" />
+            <input type="submit" value="Compare" class="btn btn-teal btn-group-justified" />
         </div>
         <div class="col-sm-5">
             <textarea asp-for="@Model.RightEntity" id="rightEntity" class="well pull-right textareacompare"></textarea>
@@ -26,7 +29,7 @@
     </form>
 
 </div>
-    @if (Model.ComparisonResult != null)
-    {
-        Html.RenderPartial("Comparisons/_SideBySideComparison", Model);
-    }
+@if (Model.ComparisonResult != null)
+{
+    Html.RenderPartial("Comparisons/_SideBySideComparison", Model);
+}

@@ -7,8 +7,8 @@
     {
 
         var bgclass =
-            element.Value.Any(x => x.ComparisonResult.Outcome == ComparisonOutcome.Different) ? "label-diff" :
-                element.Value.Any(x => x.ComparisonResult.Outcome == ComparisonOutcome.Missing) ? "label-miss" : "label-equal";
+            element.Value.Any(x => x.ComparisonResult.Outcome == ComparisonOutcome.Different) ? "custlabel label-diff" :
+                element.Value.Any(x => x.ComparisonResult.Outcome == ComparisonOutcome.Missing) ? "custlabel label-miss" : "custlabel label-equal";
 
         var isDifferent = element.Value.Any(x => x.ComparisonResult.Outcome == ComparisonOutcome.Different || x.ComparisonResult.Outcome == ComparisonOutcome.Missing);
 

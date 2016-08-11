@@ -2,54 +2,55 @@
     ViewData["Title"] = "Compare schema";
 }
 @model SqlComparer.Web.ViewModels.SchemaComparison
+<div class="row">
+    <div class="col-sm-12">
+        <h1>
+            <i class="glyphicon glyphicon-search"></i> Search
+        </h1>
+    </div>
+</div>
+<div class="row">
+    <form asp-controller="Search" asp-action="CompareSchema" method="post">
+        <div class="col-sm-6">
 
-    <div class="row">
-        <form asp-controller="Search" asp-action="CompareSchema" method="post">
-            <div class="col-sm-6">
-                <h1>
-                    <i class="glyphicon glyphicon-search"></i> Search
-                </h1>
-                <div class="input-group" id="search">
-                    <input asp-for="SchemaName" class="form-control" type="text" id="schemaName" placeholder="schema name" />
-                    <span class="input-group-btn">
-                        <button type="submit" class="btn btn-teal">
-                            Search
-                        </button>
-                    </span>
-                </div>
+            <div class="input-group" id="search">
+                <input asp-for="SchemaName" class="form-control" type="text" id="schemaName" placeholder="schema name" />
+                <span class="input-group-btn">
+                    <button type="submit" class="btn btn-teal">
+                        Search
+                    </button>
+                </span>
             </div>
-            <div class="col-sm-2">
-
-            </div>
+        </div>
         <div class="col-sm-2">
-            <a href="#environments" class="toggle btn btn-mint btn-sm">select environments <i class="glyphicon glyphicon-triangle-bottom small"></i></a>
-            <div class="hidden pad20" id="environments">
-                <div class="row" id="selectedConnections">
+            <a href="#environments" class="toggle btn btn-mint">select environments <i class="glyphicon glyphicon-triangle-bottom small"></i></a>
+            <div class="hidden" id="environments">
+                <div class="row pad20" id="selectedConnections">
                     @for (var i = 0; i < Model.ConfigConnections.Count; i++)
                     {
-                        <div class="col-sm-4 pad5"><span>@Model.ConfigConnections[i].ConnectionName</span></div>
+                        <div class="col-sm-5 pad5"><span>@Model.ConfigConnections[i].ConnectionName</span></div>
                         <div class="col-sm-5 pad5">
                             <input class="emphasis" checked data-size="mini" id="conn.display.@Model.ConfigConnections[i].ConnectionName" onchange="includeConnection('@Model.ConfigConnections[i].ConnectionName')" data-on-color="squirtle" type="checkbox" name="my-checkbox" checked>
 
-                            <input id="conn.name.@Model.ConfigConnections[i].ConnectionName" asp-for="@Model.ConfigConnections[i].ConnectionName" type="hidden"/>
-                            <input id="conn.incl.@Model.ConfigConnections[i].ConnectionName" asp-for="@Model.ConfigConnections[i].IsIncluded" type="hidden" value="true"/>
+                            <input id="conn.name.@Model.ConfigConnections[i].ConnectionName" asp-for="@Model.ConfigConnections[i].ConnectionName" type="hidden" />
+                            <input id="conn.incl.@Model.ConfigConnections[i].ConnectionName" asp-for="@Model.ConfigConnections[i].IsIncluded" type="hidden" value="true" />
                         </div>
                     }
 
-                        </div>
-            </div>
-            </div>
-            <div class="col-sm-2">
-                <a href="#colours" class="toggle btn btn-mint btn-sm btn-group btn-group-justified">colour coding <i class="glyphicon glyphicon-triangle-bottom small"></i></a>
-                <div class="list-group hidden pad20" id="colours">
-                    <span class="list-group-item list-miss small">missing</span>
-                    <span class="list-group-item list-diff small">different</span>
-                    <span class="list-group-item list-equal small">equal</span>
                 </div>
             </div>
-        
-        </form>
-    </div>
+        </div>
+        <div class="col-sm-2">
+            <a href="#colours" class="toggle btn btn-mint btn-group btn-group-justified">colour coding <i class="glyphicon glyphicon-triangle-bottom small"></i></a>
+            <div class="list-group hidden pad20" id="colours">
+                <span class="list-group-item list list-miss small">missing</span>
+                <span class="list-group-item list list-diff small">different</span>
+                <span class="list-group-item list list-equal small">equal</span>
+            </div>
+        </div>
+
+    </form>
+</div>
 <div class="row pad20">
     <div class="col-sm-12">
         @{
@@ -73,9 +74,9 @@
 
             if (notEncryptedComparisons.Any())
             {
-                <hr/>
+                <hr />
                 Html.RenderPartial("Comparisons/_ListComparison", notEncryptedComparisons.ToDictionary(x => x.Key, x => x.Value));
             }
         }
     </div>
-    </div>
+</div>

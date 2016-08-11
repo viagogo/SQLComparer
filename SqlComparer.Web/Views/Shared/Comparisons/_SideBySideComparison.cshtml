@@ -11,20 +11,20 @@
 
         <div class="col-sm-5">
             <h3>@Model.LeftAlias</h3>
-                <ol class="well comparison">
+            <ol class="well comparison">
 
-                    @for (var i = 0; i < Model.ComparisonResult.LeftSourceTreeByLine.Count; i++)
+                @for (var i = 0; i < Model.ComparisonResult.LeftSourceTreeByLine.Count; i++)
+                {
+                    var line = Model.ComparisonResult.LeftSourceTreeByLine.ElementAt(i);
+                    if (Model.ComparisonResult.LinesDifferingInLeftEntity.Contains(line.Key))
                     {
-                        var line = Model.ComparisonResult.LeftSourceTreeByLine.ElementAt(i);
-                        if (Model.ComparisonResult.LinesDifferingInLeftEntity.Contains(line.Key))
-                        {
-                            <li class="marh20"><code class="Diff">@line.Value</code></li>
-                        }
-                        else
-                        {
-                            <li class="marh20"><code>@line.Value</code></li>
-                        }
-                    }    
+                        <li class="marh20"><code class="Diff">@line.Value</code></li>
+                    }
+                    else
+                    {
+                        <li class="marh20"><code>@line.Value</code></li>
+                    }
+                }
             </ol>
         </div>
 
@@ -35,20 +35,20 @@
                 <span><i class="glyphicon glyphicon-ok-sign cEqu btn-lg padResp40 "></i></span>
 
             }
-            
+
             @if (Model.ShowPushOptions)
             {
-                <div class="row pad10">
+                <div class="row pad10 mar-t-56">
                     @if (needsAction && !string.IsNullOrWhiteSpace(Model.LeftEntity))
                     {
                         <form method="post" asp-controller="Comparison" asp-action="Push">
                             <button class="btn btn-squirtle">Push <i class="glyphicon glyphicon-arrow-right"></i></button>
-                            <input type="hidden" name="PushFromLeftToRight" value="true"/>
-                            <input asp-for="TargetDatabase" type="hidden"/>
-                            <input asp-for="LeftAlias" type="hidden"/>
-                            <input asp-for="RightAlias" type="hidden"/>
-                            <input asp-for="LeftEntity" type="hidden"/>
-                            <input asp-for="RightEntity" type="hidden"/>
+                            <input type="hidden" name="PushFromLeftToRight" value="true" />
+                            <input asp-for="TargetDatabase" type="hidden" />
+                            <input asp-for="LeftAlias" type="hidden" />
+                            <input asp-for="RightAlias" type="hidden" />
+                            <input asp-for="LeftEntity" type="hidden" />
+                            <input asp-for="RightEntity" type="hidden" />
                         </form>
                     }
                 </div>
@@ -57,12 +57,12 @@
                     {
                         <form method="post" asp-controller="Comparison" asp-action="Push">
                             <button class="btn btn-squirtle"><i class="glyphicon glyphicon-arrow-left"></i> Push</button>
-                            <input type="hidden" name="PushFromRightToLeft" value="true"/>
-                            <input asp-for="TargetDatabase" type="hidden"/>
-                            <input asp-for="LeftAlias" type="hidden"/>
-                            <input asp-for="RightAlias" type="hidden"/>
-                            <input asp-for="LeftEntity" type="hidden"/>
-                            <input asp-for="RightEntity" type="hidden"/>
+                            <input type="hidden" name="PushFromRightToLeft" value="true" />
+                            <input asp-for="TargetDatabase" type="hidden" />
+                            <input asp-for="LeftAlias" type="hidden" />
+                            <input asp-for="RightAlias" type="hidden" />
+                            <input asp-for="LeftEntity" type="hidden" />
+                            <input asp-for="RightEntity" type="hidden" />
                         </form>
                     }
                 </div>
@@ -92,7 +92,7 @@
                         }
                     }
                 }
-</ol>
+            </ol>
         </div>
 
 

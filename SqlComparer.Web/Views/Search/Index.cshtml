@@ -4,59 +4,63 @@
 @using SqlComparer.Model
 @model SqlComparer.Web.ViewModels.Search
 
-
-    <div class="row">
-
-        <form asp-controller="Search" asp-action="Search" method="post" class="form-horizontal">
-            <div class="col-sm-6">
-                <h1>
-                    <i class="glyphicon glyphicon-search"></i> Search
-                </h1>
-                @*<div class="form-inline">
-                        <label for="extConn">External Connection String:</label>
-                        <input asp-for="ExternalConnectionString" type="text" id="extConn" placeholder="connection string" class="form-control"/>
-                        <hr/>
-                    </div>*@
-                <div class="input-group" id="search">
-                    <input asp-for="ObjectNames" class="form-control" type="text" id="objectName" placeholder="comma separated list of procedures" value=""/>
-
-                    <span class="input-group-btn">
-                        <button type="submit" class="btn btn-teal">
-                            Search
-                        </button>
-                    </span>
-                </div>
-            </div>
-            <div class="col-sm-2">
-                <a href="#environments" class="toggle btn btn-mint btn-sm">select environments <i class="glyphicon glyphicon-triangle-right small"></i></a>
-                </div><div class="col-sm-2">
-    <div class="hidden" id="environments">
-        <div class="row form-group text-left mar0" id="selectedConnections">
-
-            @for (var i = 0; i < Model.ConfigConnections.Count; i++)
-            {
-
-                <div class="col-sm-6 pad5">
-                    <span>@Model.ConfigConnections[i].ConnectionName </span>
-                </div>
-                <div class="col-sm-6 pad5">
-                    <input class="emphasis" checked data-size="mini" data-on-color="squirtle" id="conn.display.@Model.ConfigConnections[i].ConnectionName" onchange="includeConnection('@Model.ConfigConnections[i].ConnectionName')" type="checkbox" name="my-checkbox" checked>
-                    <input id="conn.name.@Model.ConfigConnections[i].ConnectionName" asp-for="@Model.ConfigConnections[i].ConnectionName" type="hidden" />
-                    <input id="conn.incl.@Model.ConfigConnections[i].ConnectionName" asp-for="@Model.ConfigConnections[i].IsIncluded" type="hidden" value="true" />
-                </div>
-
-            }
-
-        </div>
+<div class="row">
+    <div class="col-sm-12">
+        <h1>
+            <i class="glyphicon glyphicon-search"></i> Search
+        </h1>
     </div>
 </div>
+<div class="row">
 
-        </form>
-        
-    </div>
+    <form asp-controller="Search" asp-action="Search" method="post" class="form-horizontal">
+        <div class="col-sm-6">
+
+            @*<div class="form-inline">
+                    <label for="extConn">External Connection String:</label>
+                    <input asp-for="ExternalConnectionString" type="text" id="extConn" placeholder="connection string" class="form-control"/>
+                    <hr/>
+                </div>*@
+            <div class="input-group" id="search">
+                <input asp-for="ObjectNames" class="form-control" type="text" id="objectName" placeholder="comma separated list of procedures" value="" />
+
+                <span class="input-group-btn">
+                    <button type="submit" class="btn btn-teal">
+                        Search
+                    </button>
+                </span>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <a href="#environments" class="toggle btn btn-mint">select environments <i class="glyphicon glyphicon-triangle-bottom small"></i></a>
+
+            <div class="hidden" id="environments">
+                <div class="row pad20 form-group text-left mar0" id="selectedConnections">
+
+                    @for (var i = 0; i < Model.ConfigConnections.Count; i++)
+                    {
+
+                        <div class="col-sm-5 pad5">
+                            <span>@Model.ConfigConnections[i].ConnectionName </span>
+                        </div>
+                        <div class="col-sm-5 pad5">
+                            <input class="emphasis" checked data-size="mini" data-on-color="squirtle" id="conn.display.@Model.ConfigConnections[i].ConnectionName" onchange="includeConnection('@Model.ConfigConnections[i].ConnectionName')" type="checkbox" name="my-checkbox" checked>
+                            <input id="conn.name.@Model.ConfigConnections[i].ConnectionName" asp-for="@Model.ConfigConnections[i].ConnectionName" type="hidden" />
+                            <input id="conn.incl.@Model.ConfigConnections[i].ConnectionName" asp-for="@Model.ConfigConnections[i].IsIncluded" type="hidden" value="true" />
+                        </div>
+
+                    }
+
+                </div>
+            </div>
+        </div>
+
+    </form>
+
+</div>
 
 <div class="row pad20">
-  
+
     <div class="col-sm-12">
 
         @{

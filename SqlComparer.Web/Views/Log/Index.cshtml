@@ -20,7 +20,7 @@
         <h2 class="text-center">Log History</h2>
         <hr/>
 
-        <table class="table-bordered table-hover table-striped table-condensed">
+        <table class="table-bordered table-striped table-condensed">
             <tr>
                 <th></th>
                 <th>Time</th>
@@ -31,11 +31,11 @@
             @foreach (var entry in Model.LogMessages.OrderByDescending(x => x.EventTime))
             {
                 <tr>
-                    <td style="background-color: @colours[entry.Severity];"></td>
-                    <td>@entry.EventTime</td>
-                    <td style="font-size: 12px;">@entry.Source</td>
-                    <td class="text-center">@entry.Severity</td>
-                    <td>@entry.Message</td>
+                    <td width="1%" style="background-color: @colours[entry.Severity]"></td>
+                    <td width="10%">@entry.EventTime</td>
+                    <td width="45%" class="breakword">@entry.Source</td>
+                    <td width="5%"class="text-center">@entry.Severity</td>
+                    <td width="39%" class="breakword">@entry.Message</td>
                 </tr>
             }
         </table>
