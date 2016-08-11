@@ -4,7 +4,7 @@
 @using SqlComparer.Model
 @model SqlComparer.Web.ViewModels.Search
 
-<div class="container pad20">
+
     <div class="row">
 
         <form asp-controller="Search" asp-action="Search" method="post" class="form-horizontal">
@@ -17,54 +17,68 @@
                         <input asp-for="ExternalConnectionString" type="text" id="extConn" placeholder="connection string" class="form-control"/>
                         <hr/>
                     </div>*@
-                <div class="form-group" id="search">
-                    <input asp-for="ObjectName" class="form-control" type="text" id="objectName" placeholder="comma separated list of procs" value="" />
-                    <button type="submit" class="btn vgggreen">
-                        <p class="whitetext">Search</p>
-                    </button>
-                </div>
-            </div>
-            <div class="col-sm-1">
-                <div class="form-group text-left" id="selectedConnections">
-                    @for (var i = 0; i < Model.ConfigConnections.Count; i++)
-                    {
-                        <div class="row">
-                            <span>@Model.ConfigConnections[i].ConnectionName </span>
-                            <input class="emphasis" checked data-size="small" data-on-color="warning" id="conn.display.@Model.ConfigConnections[i].ConnectionName" onchange="includeConnection('@Model.ConfigConnections[i].ConnectionName')" type="checkbox" name="my-checkbox" checked>
-                            <input id="conn.name.@Model.ConfigConnections[i].ConnectionName" asp-for="@Model.ConfigConnections[i].ConnectionName" type="hidden" />
-                            <input id="conn.incl.@Model.ConfigConnections[i].ConnectionName" asp-for="@Model.ConfigConnections[i].IsIncluded" type="hidden" value="true" />
-                        </div>
-                    }
-                </div>
-            </div>
-        </form>
+                <div class="input-group" id="search">
+                    <input asp-for="ObjectNames" class="form-control" type="text" id="objectName" placeholder="comma separated list of procedures" value=""/>
 
+                    <span class="input-group-btn">
+                        <button type="submit" class="btn btn-teal">
+                            Search
+                        </button>
+                    </span>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <a href="#environments" class="toggle btn btn-mint btn-sm">select environments <i class="glyphicon glyphicon-triangle-right small"></i></a>
+                </div><div class="col-sm-2">
+    <div class="hidden" id="environments">
+        <div class="row form-group text-left mar0" id="selectedConnections">
+
+            @for (var i = 0; i < Model.ConfigConnections.Count; i++)
+            {
+
+                <div class="col-sm-6 pad5">
+                    <span>@Model.ConfigConnections[i].ConnectionName </span>
+                </div>
+                <div class="col-sm-6 pad5">
+                    <input class="emphasis" checked data-size="mini" data-on-color="squirtle" id="conn.display.@Model.ConfigConnections[i].ConnectionName" onchange="includeConnection('@Model.ConfigConnections[i].ConnectionName')" type="checkbox" name="my-checkbox" checked>
+                    <input id="conn.name.@Model.ConfigConnections[i].ConnectionName" asp-for="@Model.ConfigConnections[i].ConnectionName" type="hidden" />
+                    <input id="conn.incl.@Model.ConfigConnections[i].ConnectionName" asp-for="@Model.ConfigConnections[i].IsIncluded" type="hidden" value="true" />
+                </div>
+
+            }
+
+        </div>
     </div>
 </div>
-<div class="container">
-    <div class="row">
-        @if (TempData["message"] != null)
-        {
-            <div class="alert alert-success"> <strong>Results: </strong>@TempData["message"]</div>
-        }
+
+        </form>
+        
+    </div>
+
+<div class="row pad20">
+  
+    <div class="col-sm-12">
 
         @{
             var comparisonsWithExistingEntities = Model.ComparisonResults.Where(x => x.Value.Any(y =>
                 y.ComparisonResult.Outcome == ComparisonOutcome.Different ||
                 y.ComparisonResult.Outcome == ComparisonOutcome.Equal) ||
-                x.Value.Any(y => y.IsEncrypted))
+                                                                                     x.Value.Any(y => y.IsEncrypted))
                 .ToArray();
             var notFoundEntities = Model.ComparisonResults.Except(comparisonsWithExistingEntities).ToArray();
 
             if (notFoundEntities.Any())
             {
-                <div>
-                    <span>Not found:</span>
-                    @foreach (var notFoundEntity in notFoundEntities)
-                    {
-                        <button class="btn btn-danger">@notFoundEntity.Key</button>
-                    }
+                var notFound = new List<object>();
+
+                foreach (var notFoundEntity in notFoundEntities)
+                {
+                    notFound.Add(notFoundEntity.Key);
+                }
+                <div class="alert alert-danger narrowallert">
+                    <strong>Not found:</strong> @string.Join(", ", notFound)
                 </div>
+
             }
 
             var notEncryptedComparisons = comparisonsWithExistingEntities.Where(result => result.Value.All(comparison => !comparison.IsEncrypted)).ToArray();
@@ -72,16 +86,18 @@
 
             if (encryptedComparisons.Any())
             {
-                <div>
-                    <span>Encrypted procedures:</span>
-                    @foreach (var encryptedComparison in encryptedComparisons)
-                    {
-                        <button class="btn btn-warning">@encryptedComparison.Key</button>
-                    }
+                var encrypted = new List<object>();
+
+                foreach (var encryptedComparison in encryptedComparisons)
+                {
+                    encrypted.Add(encryptedComparison.Key);
+                }
+                <div class="alert alert-danger narrowallert">
+                    <strong>Encrypted:</strong> @string.Join(", ", encrypted)
                 </div>
             }
 
-            if (notEncryptedComparisons.Any())
+            @if (notEncryptedComparisons.Any())
             {
                 foreach (var comparisonResult in notEncryptedComparisons)
                 {

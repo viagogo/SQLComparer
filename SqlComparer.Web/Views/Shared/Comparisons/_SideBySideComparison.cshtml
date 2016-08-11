@@ -2,24 +2,24 @@
 @using SqlComparer.Web.ViewModels
 @model ComparisonResultViewModel
 
-<div style="clear: both; width: 100%">
+<div class="row">
     <div>
         @{
             var needsAction = Model.ComparisonResult.Outcome == ComparisonOutcome.Missing ||
                               Model.ComparisonResult.Outcome == ComparisonOutcome.Different;
         }
 
-        <div class="col-lg-5">
-            <h3 style="font-weight: bold;">@Model.LeftAlias</h3>
+        <div class="col-sm-5">
+            <h3>@Model.LeftAlias</h3>
 
-            <pre class="well" style="line-height: initial; max-width: none; text-align: initial; white-space: initial; word-break: initial;">
+            <pre class="well comparison">
                 @{
                     for (var i = 0; i < Model.ComparisonResult.LeftSourceTreeByLine.Count; i++)
                     {
                         var line = Model.ComparisonResult.LeftSourceTreeByLine.ElementAt(i);
                         if (Model.ComparisonResult.LinesDifferingInLeftEntity.Contains(line.Key))
                         {
-                            <code style="background-color: orangered">@line.Value</code>
+                            <code class="Diff">@line.Value</code>
                         }
                         else
                         {
@@ -27,16 +27,16 @@
                         }
                     }
                 }
-        </pre>
+            </pre>
         </div>
 
-        <div class="col-lg-2 text-center" style="margin-top: 57px;">
+        <div class="col-sm-2 text-center">
             @if (Model.ShowPushOptions)
             {
-                <div style="display: inline; margin-left: 10px;">
+                <div>
                     @if (needsAction && !string.IsNullOrWhiteSpace(Model.LeftEntity))
                     {
-                        <form method="post" asp-controller="Comparison" asp-action="Push" style="display: inline;">
+                        <form method="post" asp-controller="Comparison" asp-action="Push">
                             <button class="btn btn-danger">Push <i class="glyphicon glyphicon-arrow-right"></i></button>
                             <input type="hidden" name="PushFromLeftToRight" value="true"/>
                             <input asp-for="TargetDatabase" type="hidden"/>
@@ -45,12 +45,11 @@
                             <input asp-for="LeftEntity" type="hidden"/>
                             <input asp-for="RightEntity" type="hidden"/>
                         </form>
-                        <br/>
                     }
 
                     @if (needsAction && !string.IsNullOrWhiteSpace(Model.RightEntity))
                     {
-                        <form method="post" asp-controller="Comparison" asp-action="Push" style="display: inline;">
+                        <form method="post" asp-controller="Comparison" asp-action="Push">
                             <button class="btn btn-danger" style="margin: 5px 0 0 6px"><i class="glyphicon glyphicon-arrow-left"></i> Push</button>
                             <input type="hidden" name="PushFromRightToLeft" value="true"/>
                             <input asp-for="TargetDatabase" type="hidden"/>
@@ -65,24 +64,27 @@
 
             @if (!needsAction)
             {
-                <div>
-                    <i class="glyphicon glyphicon-ok-sign" style="color: green; font-size: 25px;"></i>
-                </div>
+                <span><i class="glyphicon glyphicon-ok-sign cEqu btn-lg padResp40 "></i></span>
+
+            }
+            else
+            {
+                <span><i class="glyphicon glyphicon-remove-sign cDiff btn-lg padResp40"></i></span>
             }
 
         </div>
 
-        <div class="col-lg-5">
-            <h3 style="font-weight: bold;">@Model.RightAlias</h3>
+        <div class="col-sm-5">
+            <h3>@Model.RightAlias</h3>
 
-            <pre class="well" style="line-height: initial; max-width: none; text-align: initial; white-space: initial; word-break: initial;">
+            <pre class="well comparison">
                 @{
                     for (var i = 0; i < Model.ComparisonResult.RightSourceTreeByLine.Count; i++)
                     {
                         var line = Model.ComparisonResult.RightSourceTreeByLine.ElementAt(i);
                         if (Model.ComparisonResult.LinesDifferingInRightEntity.Contains(line.Key))
                         {
-                            <code style="background-color: orangered">@line.Value</code>
+                            <code class="Diff">@line.Value</code>
                         }
                         else
                         {
@@ -97,4 +99,4 @@
     </div>
 </div>
 
-<div style="clear: both;"></div>
+<div class="clearfix"></div>

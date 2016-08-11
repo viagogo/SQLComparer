@@ -4,29 +4,29 @@
 @model SqlComparer.Web.ViewModels.ComparisonResultViewModel
 
 <div class="row">
-    <div class="span12" style="text-align: center">
-        <h2 class="text-center">Compare two procs</h2>
-        <hr/>
+    @if (TempData["message"] != null)
+    {
+        <div class="alert alert-danger">@TempData["message"]</div>
+    }
+    <h1>
+        <i class="glyphicon glyphicon-duplicate"></i> Compare
+    </h1>
 
-        @if (TempData["message"] != null)
-        {
-            <div class="alert alert-danger"> <strong>@TempData["message"]</strong></div>
-        }
 
-        <form asp-controller="Comparison" asp-action="CompareProcs" method="post">
-            <div>
-                <textarea asp-for="@Model.LeftEntity" id="leftEntity" class="well pull-left" style="width: 450px; height: 700px; max-width: none"></textarea>
-                <textarea asp-for="@Model.RightEntity" id="rightEntity" class="well pull-right" style="width: 450px; height: 700px; max-width: none"></textarea>
-            </div>
+    <form asp-controller="Comparison" asp-action="CompareProcs" method="post">
+        <div class="col-sm-5">
+            <textarea asp-for="@Model.LeftEntity" id="leftEntity" class="well pull-left" style="width: 450px; height: 700px; max-width: none"></textarea>
+        </div>
+        <div class="col-sm-2">
+            <input type="submit" value="Compare" class="btn btn-teal btn-group btn-group-justified" />
+        </div>
+        <div class="col-sm-5">
+            <textarea asp-for="@Model.RightEntity" id="rightEntity" class="well pull-right" style="width: 450px; height: 700px; max-width: none"></textarea>
+        </div>
+    </form>
 
-            <div>
-                <input type="submit" value="COMPARE" class="btn btn-success" style="width: 250px;" />
-            </div>
-        </form>
-    </div>
-
+</div>
     @if (Model.ComparisonResult != null)
     {
         Html.RenderPartial("Comparisons/_SideBySideComparison", Model);
     }
-</div>

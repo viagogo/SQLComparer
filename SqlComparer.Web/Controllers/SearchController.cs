@@ -45,15 +45,30 @@ namespace SqlComparer.Web.Controllers
         [HttpPost]
         public IActionResult Search(Search searchQuery)
         {
-            if (searchQuery.ObjectName == null)
+            if (searchQuery.ObjectNames == null)
             {
                 TempData["message"] = "Enter a search query";
+                TempData["success"] = false;
                 return View("Index", searchQuery);
+            }
+            else
+            {
+                TempData["success"] = true;
             }
 
             var includedConnectionStrings = _optionsService.ConnectionStrings.GetIncludedConnectionStrings(searchQuery.ConfigConnections).ToArray();
-            var objectIdentifiers = _identifierService.GetIdentifiersFromObjectNames(searchQuery.ObjectName.Split(',').Select(x => x.Trim())).ToList();
+            var objectIdentifiers = _identifierService.GetIdentifiersFromObjectNames(searchQuery.ObjectNames.Split(',').Select(x => x.Trim())).ToList();
             searchQuery.ComparisonResults = GetComparisonsBetweenIdentifiers(includedConnectionStrings, objectIdentifiers);
+
+            var simpleNames = new List<string>();
+            foreach (var objectName in searchQuery.ObjectNames.Split(',').Select(x => x.Trim()))
+            {
+                var simpleName = _identifierService.GetIdentifierFromObjectName(objectName).ToSimpleName();
+                simpleNames.Add(simpleName);
+            }
+
+            TempData["message"] = $"{string.Join(", ", simpleNames)}";
+
             return View("Index", searchQuery);
         }
 
@@ -73,6 +88,8 @@ namespace SqlComparer.Web.Controllers
             var includedConnectionStrings = _optionsService.ConnectionStrings.GetIncludedConnectionStrings(schemaComparison.ConfigConnections).ToArray();
             var identifiers = _databaseEntityRepository.GetIdentifiersFromSchema(_identifierService.GetIdentifierFromSchemaName(schemaComparison.SchemaName), includedConnectionStrings).Take(20);
             schemaComparison.ComparisonResults = GetComparisonsBetweenIdentifiers(includedConnectionStrings, identifiers);
+            TempData["success"] = true;
+            TempData["message"] = $"{schemaComparison.SchemaName}";
             return View("CompareSchema", schemaComparison);
         }
 
@@ -113,9 +130,6 @@ namespace SqlComparer.Web.Controllers
                     }
                 }
             }
-
-            TempData["message"] = $"Searched for objects {string.Join(", ", identifiers)}";
-
             return results;
         }
     }

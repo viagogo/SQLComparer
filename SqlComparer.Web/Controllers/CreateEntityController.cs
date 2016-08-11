@@ -57,7 +57,7 @@ namespace SqlComparer.Web.Controllers
             {
                 _logger.LogError("Could not push due to insufficient permissions.");
                 _logger.LogInformation($"Targets: {string.Join(", ", connectionAliases)}");
-                TempData["success"] = false;
+                TempData["successCreate"] = false;
                 TempData["message"] = "You don't have sufficient permissions to push to the selected targets";
                 return View("Index", createEntity);
             }
@@ -104,7 +104,7 @@ namespace SqlComparer.Web.Controllers
 
                         // Return with error message
                         _logger.LogError($"The entity {identifier} is already present in one or more targets.");
-                        TempData["success"] = false;
+                        TempData["successCreate"] = false;
                         TempData["message"] = $"The entity {identifier} is already present in one or more targets.";
                         return View("Index", createEntity);
                     }
@@ -117,7 +117,7 @@ namespace SqlComparer.Web.Controllers
 
             var success = _databaseEntityRepository.InsertEntities(createEntity.Database, createEntity.Sql, sourcesToInsert);
 
-            TempData["success"] = success;
+            TempData["successCreate"] = success;
             if (success)
             {
                 _logger.LogInformation($"SQL succesfully executed.\n{createEntity.Sql}");

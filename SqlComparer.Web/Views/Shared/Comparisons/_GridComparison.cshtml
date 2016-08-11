@@ -12,10 +12,10 @@
             var aliases = orderedComparisons.Select(x => x.LeftAlias).Distinct().ToArray();
         }
         <tr>
-            <th>#</th>
+            <th class="text-center" >#</th>
             @foreach (var comparison in aliases)
             {
-                <th>@comparison</th>
+                <th class="text-center">@comparison</th>
             }
         </tr>
         @{
@@ -26,13 +26,13 @@
         {
             var comparisons = orderedComparisons.Where(x => x.LeftAlias == alias);
             <tr>
-                <th>@alias</th>
+                <th class="text-center">@alias</th>
                 @foreach (var comparison in comparisons)
                 {
                     var backgroundColour =
-                        comparison.ComparisonResult.Outcome == ComparisonOutcome.Equal ? "#afdb76" :
-                            comparison.ComparisonResult.Outcome == ComparisonOutcome.Different ? "#f31616" :
-                                comparison.ComparisonResult.Outcome == ComparisonOutcome.Missing ? "#fbefb1" :
+                        comparison.ComparisonResult.Outcome == ComparisonOutcome.Equal ? "Equ" :
+                            comparison.ComparisonResult.Outcome == ComparisonOutcome.Different ? "Diff" :
+                                comparison.ComparisonResult.Outcome == ComparisonOutcome.Missing ? "Miss" :
                                         "white";
 
                     var message = string.IsNullOrWhiteSpace(comparison.LeftEntity) && string.IsNullOrWhiteSpace(comparison.RightEntity) ? "Missing in both" :
@@ -49,24 +49,23 @@
                     {
                         if (string.IsNullOrWhiteSpace(comparison.LeftEntity) && string.IsNullOrWhiteSpace(comparison.RightEntity))
                         {
-                            <td style="background-color: @backgroundColour; font-weight: bold;">@message</td>
+                            <td class="text-center @backgroundColour">@message</td>
                         }
                         else
                         {
                             var uniqueId = Guid.NewGuid().ToString("N");
                             modals.Add(uniqueId, comparison);
-                            <td style="background-color: @backgroundColour; font-weight: bold;" class="clickable" role="button" data-toggle="modal" data-target="#@uniqueId">@message</td>
+                            <td  class="text-center @backgroundColour clickable" role="button" data-toggle="modal" data-target="#@uniqueId">@message</td>
                         }
                     }
                     else
                     {
-                        <td style="background-color: @backgroundColour; font-weight: bold;">@message</td>
+                        <td class="text-center @backgroundColour">@message</td>
                     }
                 }
             </tr>
         }
     </table>
-
     @{
         foreach (var modal in modals)
         {
