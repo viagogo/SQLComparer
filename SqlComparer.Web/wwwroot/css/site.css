@@ -116,3 +116,23 @@ select {
 .listEntry:hover {
     cursor: pointer;
 }
+
+td.equal {
+    background-color: #afdb76;
+}
+
+td.diff {
+    background-color: #f31616;
+}
+
+td.miss {
+    background-color: #fbefb1;
+}
+
+td.def {
+    background-color: #ffffff;
+}
+
+.gridComparison td {
+    font-weight: bold;
+}

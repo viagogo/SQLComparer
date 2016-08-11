@@ -3,6 +3,11 @@
 @model ComparisonResultViewModel
 
 <div style="clear: both; width: 100%">
+    @if (TempData["message"] != null)
+    {
+        <div class="alert alert-success">@TempData["message"]</div>
+    }
+
     <div>
         @{
             var needsAction = Model.ComparisonResult.Outcome == ComparisonOutcome.Missing ||
@@ -27,7 +32,7 @@
                         }
                     }
                 }
-        </pre>
+            </pre>
         </div>
 
         <div class="col-lg-2 text-center" style="margin-top: 57px;">
@@ -36,30 +41,20 @@
                 <div style="display: inline; margin-left: 10px;">
                     @if (needsAction && !string.IsNullOrWhiteSpace(Model.LeftEntity))
                     {
-                        <form method="post" asp-controller="Comparison" asp-action="Push" style="display: inline;">
-                            <button class="btn btn-danger">Push <i class="glyphicon glyphicon-arrow-right"></i></button>
-                            <input type="hidden" name="PushFromLeftToRight" value="true"/>
-                            <input asp-for="TargetDatabase" type="hidden"/>
-                            <input asp-for="LeftAlias" type="hidden"/>
-                            <input asp-for="RightAlias" type="hidden"/>
-                            <input asp-for="LeftEntity" type="hidden"/>
-                            <input asp-for="RightEntity" type="hidden"/>
-                        </form>
+                        <button class="btn btn-danger pushToRight">Push <i class="glyphicon glyphicon-arrow-right"></i></button>
                         <br/>
                     }
 
                     @if (needsAction && !string.IsNullOrWhiteSpace(Model.RightEntity))
                     {
-                        <form method="post" asp-controller="Comparison" asp-action="Push" style="display: inline;">
-                            <button class="btn btn-danger" style="margin: 5px 0 0 6px"><i class="glyphicon glyphicon-arrow-left"></i> Push</button>
-                            <input type="hidden" name="PushFromRightToLeft" value="true"/>
-                            <input asp-for="TargetDatabase" type="hidden"/>
-                            <input asp-for="LeftAlias" type="hidden"/>
-                            <input asp-for="RightAlias" type="hidden"/>
-                            <input asp-for="LeftEntity" type="hidden"/>
-                            <input asp-for="RightEntity" type="hidden"/>
-                        </form>
+                        <button class="btn btn-danger pushToLeft" style="margin: 5px 0 0 6px"><i class="glyphicon glyphicon-arrow-left"></i> Push</button>
                     }
+                    
+                    <input asp-for="TargetDatabase" type="hidden" />
+                    <input asp-for="LeftAlias" type="hidden" />
+                    <input asp-for="RightAlias" type="hidden" />
+                    <input asp-for="LeftEntity" type="hidden" />
+                    <input asp-for="RightEntity" type="hidden" />
                 </div>
             }
 
@@ -69,7 +64,6 @@
                     <i class="glyphicon glyphicon-ok-sign" style="color: green; font-size: 25px;"></i>
                 </div>
             }
-
         </div>
 
         <div class="col-lg-5">
@@ -90,10 +84,8 @@
                         }
                     }
                 }
-        </pre>
+            </pre>
         </div>
-
-
     </div>
 </div>
 

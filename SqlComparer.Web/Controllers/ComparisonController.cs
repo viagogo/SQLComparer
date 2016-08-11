@@ -82,7 +82,7 @@ namespace SqlComparer.Web.Controllers
             {
                 TempData["message"] = $"No permission to push from {origin} to {target}";
                 _logger.LogError($"No permission to push from {origin} to {target}");
-                return RedirectToAction("Index", "Search");
+                goto redirect;
             }
 
             if (!string.IsNullOrWhiteSpace(comparisonResultViewModel.TargetDatabase))
@@ -94,7 +94,7 @@ namespace SqlComparer.Web.Controllers
                     {
                         TempData["message"] = $"Created new procedure from {origin} to {target}";
                         _logger.LogInformation($"Created new procedure {sqlToPush} from {origin} to {target}");
-                        return RedirectToAction("Index", "Search");
+                        goto redirect;
                     }
                 }
                 else
@@ -104,20 +104,32 @@ namespace SqlComparer.Web.Controllers
                     {
                         TempData["message"] = $"Altered existing entity from {origin} to {target}";
                         _logger.LogInformation($"Altered existing entity {sqlToPush} from {origin} to {target}");
-                        return RedirectToAction("Index", "Search");
+                        goto redirect;
                     }
                 }
                 
     
                 TempData["message"] = $"Could not push from {origin} to {target}";
                 _logger.LogError($"Could not push {sqlToPush} from {origin} to {target}. Refer to the log for more information.");            
-
-                return RedirectToAction("Index", "Search");
+                goto redirect;
             }
 
             _logger.LogError($"Something went wrong. Database: {comparisonResultViewModel.TargetDatabase}, Sql:\n{sqlToPush}");
             TempData["message"] = "Something went really, really wrong. Whatever you did, try it again.";
-            return RedirectToAction("Index", "Search");
+            goto redirect;
+
+            redirect:
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return Json(new
+                {
+                    message = TempData["message"]
+                });
+            }
+            else
+            {
+                return RedirectToAction("Index", "Search");
+            }
         }
     }
 }
