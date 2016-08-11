@@ -1,3 +1,31 @@
-﻿@{
-    Layout = "_Layout";
-}
+﻿<div class="container pad20">
+    <div class="row">
+        @if (TempData.ContainsKey("success") && (bool) TempData["success"] == false)
+        {
+
+            <div class="alert alert-warning"> <strong>warning! </strong>@TempData["message"]</div>
+
+        }
+        else if (TempData.ContainsKey("success") && (bool) TempData["success"] == true)
+        {
+
+            <div class="alert alert-info"> <strong>Results for the search: </strong>@TempData["message"]</div>
+        }
+        else if (TempData.ContainsKey("successCreate") && (bool)TempData["successCreate"] == true)
+        {
+
+            <div class="alert alert-success"> <strong>Success! </strong>@TempData["message"]</div>
+        }
+        else if (TempData.ContainsKey("successCreate") && (bool)TempData["successCreate"] == false)
+        {
+
+            <div class="alert alert-danger"> <strong> Entity was not created! </strong>@TempData["message"]</div>
+        }
+    </div>
+
+
+        @{
+            Layout = "_Layout";
+        }
+  
+</div>

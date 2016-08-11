@@ -2,35 +2,38 @@
 @using SqlComparer.Web.ViewModels
 @model IDictionary<ObjectIdentifier, IList<ComparisonResultViewModel>>
 
-<div style="width: 100%;">
+
     @foreach (var element in Model)
     {
-        var backgroundColour =
-            element.Value.Any(x => x.ComparisonResult.Outcome == ComparisonOutcome.Different) ? "red" :
-                element.Value.Any(x => x.ComparisonResult.Outcome == ComparisonOutcome.Missing) ? "orange" :
-                    "green";
-        
+
+        var bgclass =
+            element.Value.Any(x => x.ComparisonResult.Outcome == ComparisonOutcome.Different) ? "custlabel label-diff" :
+                element.Value.Any(x => x.ComparisonResult.Outcome == ComparisonOutcome.Missing) ? "custlabel label-miss" : "custlabel label-equal";
+
         var isDifferent = element.Value.Any(x => x.ComparisonResult.Outcome == ComparisonOutcome.Different || x.ComparisonResult.Outcome == ComparisonOutcome.Missing);
 
         if (isDifferent)
         {
             var uniqueId = Guid.NewGuid().ToString("N");
-
-            <div style="background-color: @backgroundColour; float: left; height: 50px; margin: 20px; width: 300px;" class="listEntry" data-target="@uniqueId">
-                <span>@element.Key.Name</span>
+            <div style="display: inline-flex; margin:0px">
+                <span class="label @bgclass listEntry pad10" data-target="@uniqueId">
+                    @element.Key.Name
+                </span>
             </div>
-
             <div id="@uniqueId" style="display: none;">
                 @{
                     Html.RenderPartial("Comparisons/_GridComparison", element);
                 }
             </div>
-        }
-        else
-        {
-            <div style="background-color: @backgroundColour; float: left; height: 50px; margin: 20px; width: 300px;">
-                <span>@element.Key.Name</span>
-            </div>
-        }
-    }
-</div>
+                    }
+                    else
+                    {
+                      <div style="display: inline-flex;  margin: 0px">
+                            <span class="label @bgclass pad10">
+                                @element.Key.Name
+                            </span>
+                          </div>
+                    
+                            }
+                        }
+                       
