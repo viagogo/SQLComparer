@@ -44,12 +44,15 @@ namespace SqlComparer.Parsing
             var stream = fragment.Fragment.ScriptTokenStream;
             var sb = new StringBuilder(stream.Count);
 
+            var firstCreateModified = false;
+
             for (var i = 0; i < stream.Count; i++)
             {
                 var token = stream.ElementAt(i);
-                if (token.TokenType == TSqlTokenType.Create)
+                if (token.TokenType == TSqlTokenType.Create && !firstCreateModified)
                 {
                     sb.Append("alter");
+                    firstCreateModified = true;
                 }
                 else
                 {
