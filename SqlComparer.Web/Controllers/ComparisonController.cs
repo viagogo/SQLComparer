@@ -87,7 +87,8 @@ namespace SqlComparer.Web.Controllers
 
             if (!string.IsNullOrWhiteSpace(comparisonResultViewModel.TargetDatabase))
             {
-                if (string.IsNullOrWhiteSpace(comparisonResultViewModel.RightEntity))
+                // TODO: Should probably formalise 'base' and 'target' entities early on in this method and reuse
+                if (string.IsNullOrWhiteSpace(comparisonResultViewModel.PushFromLeftToRight ? comparisonResultViewModel.RightEntity : comparisonResultViewModel.LeftEntity))
                 {
                     // Proc doesn't exist yet in environment -- create proc as-is
                     if(_sqlComparerService.InsertEntity(sqlToPush, comparisonResultViewModel.TargetDatabase, targetConnection))
