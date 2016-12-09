@@ -129,14 +129,18 @@ namespace SqlComparer.Web.Controllers
                             results.Add(identifier, new List<ComparisonResultViewModel>());
                         }
 
-                        results[identifier].Add(
-                            _sqlComparerService.Compare(
-                                baseProc.Representation,
-                                variableProc.Representation,
-                                leftAlias,
-                                rightAlias,
-                                identifier.Database,
-                                isEncrypted: baseProc.IsEncrypted || variableProc.IsEncrypted));
+                        var comparison = _sqlComparerService.Compare(
+                            baseProc.Representation,
+                            variableProc.Representation,
+                            leftAlias,
+                            rightAlias,
+                            identifier.Database,
+                            isEncrypted: baseProc.IsEncrypted || variableProc.IsEncrypted);
+
+                        if (comparison != null)
+                        {
+                            results[identifier].Add(comparison);    
+                        }
                     }
                 }
             }

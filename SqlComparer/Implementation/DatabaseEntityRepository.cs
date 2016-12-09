@@ -271,7 +271,7 @@ where s.Name = '{schemaIdentifier.Schema}'
                     Logger.Error(e, $"Could not open connection {connectionString}");
                     Logger.Error(e.Message);
                     Logger.Error(e.StackTrace);
-                    return default(T);
+                    return func(null);
                 }
 
                 using (var command = new SqlCommand())
@@ -290,7 +290,7 @@ where s.Name = '{schemaIdentifier.Schema}'
                         Logger.Error(e, $"Could not execute {command.CommandText}");
                         Logger.Error(e.Message);
                         Logger.Error(e.StackTrace);
-                        return default(T);
+                        return func(null);
                     }
 
                     return func(reader);
