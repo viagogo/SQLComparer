@@ -92,14 +92,18 @@ namespace SqlComparer.Web.Controllers
                         // Compare them with new sql
                         foreach (var existingProcedure in existingProcedures)
                         {
-                            createEntity.ExistingEntities.Add(
-                                _sqlComparerService.Compare(
-                                    existingProcedure.Representation,
-                                    createEntity.Sql,
-                                    _optionsService.ConnectionStrings.GetAliasByConnection(
-                                        existingProcedure.ConnectionString),
-                                    "New entity",
-                                    identifier.Database));
+                            var comparison = _sqlComparerService.Compare(
+                                existingProcedure.Representation,
+                                createEntity.Sql,
+                                _optionsService.ConnectionStrings.GetAliasByConnection(
+                                    existingProcedure.ConnectionString),
+                                "New entity",
+                                identifier.Database);
+
+                            if (comparison != null)
+                            {
+                                createEntity.ExistingEntities.Add(comparison);    
+                            }
                         }
 
                         // Return with error message
